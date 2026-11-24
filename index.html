@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Community of the Future Brochure Prompt Builder</title>
+<meta name="description" content="Fill in your community details and generate a ready-to-paste AI prompt for a luxury real estate brochure.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#0f1b2d;
+    --navy-2:#16263d;
+    --gold:#c9a24b;
+    --gold-soft:#e6d3a1;
+    --ivory:#faf7f0;
+    --ink:#1c2433;
+    --muted:#5d667a;
+    --line:#e3dccb;
+    --ok:#2f7d5b;
+    --radius:14px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;
+    font-family:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+    background:var(--ivory);
+    color:var(--ink);
+    line-height:1.55;
+  }
+  h1,h2,h3{font-family:"Cormorant Garamond",Georgia,"Times New Roman",serif;margin:0}
+  header.hero{
+    background:linear-gradient(160deg,var(--navy) 0%,var(--navy-2) 100%);
+    color:#fff;
+    padding:56px 20px 64px;
+    text-align:center;
+    border-bottom:4px solid var(--gold);
+  }
+  .hero .eyebrow{
+    letter-spacing:.28em;
+    text-transform:uppercase;
+    font-size:.75rem;
+    color:var(--gold-soft);
+    margin-bottom:14px;
+  }
+  .hero h1{font-size:clamp(2rem,5vw,3.4rem);font-weight:600;line-height:1.1}
+  .hero p{max-width:680px;margin:16px auto 0;color:#d7dce6;font-size:1.05rem}
+  main{max-width:980px;margin:-32px auto 60px;padding:0 16px}
+  .steps{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+    gap:12px;
+    margin-bottom:24px;
+  }
+  .step{
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:14px 16px;
+    box-shadow:0 6px 18px rgba(15,27,45,.06);
+    font-size:.92rem;
+  }
+  .step b{color:var(--gold);font-family:"Cormorant Garamond",Georgia,serif;font-size:1.5rem;display:block;line-height:1}
+  .card{
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:26px 24px;
+    margin-bottom:20px;
+    box-shadow:0 6px 18px rgba(15,27,45,.06);
+  }
+  .card h2{font-size:1.65rem;color:var(--navy);margin-bottom:4px}
+  .card .sub{color:var(--muted);font-size:.93rem;margin:0 0 18px}
+  .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+  .grid.three{grid-template-columns:repeat(3,1fr)}
+  @media (max-width:720px){.grid,.grid.three{grid-template-columns:1fr}}
+  label.field{display:block;font-weight:600;font-size:.88rem;color:var(--navy)}
+  label.field span.hint{display:block;font-weight:400;color:var(--muted);font-size:.8rem;margin-top:2px}
+  input[type=text],input[type=number],select,textarea{
+    width:100%;
+    margin-top:6px;
+    padding:11px 12px;
+    border:1px solid #d3cbb6;
+    border-radius:10px;
+    background:#fffdf8;
+    font:inherit;
+    color:var(--ink);
+  }
+  textarea{min-height:84px;resize:vertical}
+  input:focus,select:focus,textarea:focus{
+    outline:2px solid var(--gold);
+    outline-offset:1px;
+    border-color:var(--gold);
+  }
+  .full{grid-column:1/-1}
+  .checks{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+    gap:10px;
+    margin-top:8px;
+  }
+  .check{
+    display:flex;
+    gap:10px;
+    align-items:flex-start;
+    background:#fffdf8;
+    border:1px solid #e7dfca;
+    border-radius:10px;
+    padding:10px 12px;
+    cursor:pointer;
+    font-size:.92rem;
+  }
+  .check input{margin-top:4px;accent-color:var(--gold);width:17px;height:17px}
+  .check:has(input:checked){background:#fbf3dc;border-color:var(--gold)}
+  .check small{display:block;color:var(--muted);font-size:.78rem}
+  .actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:6px}
+  button,.btn{
+    font:inherit;
+    font-weight:600;
+    border:0;
+    border-radius:999px;
+    padding:13px 26px;
+    cursor:pointer;
+    text-decoration:none;
+    display:inline-block;
+  }
+  .primary{background:var(--gold);color:var(--navy)}
+  .primary:hover{background:#d8b45f}
+  .dark{background:var(--navy);color:#fff}
+  .dark:hover{background:var(--navy-2)}
+  .ghost{background:transparent;border:1px solid var(--navy);color:var(--navy)}
+  .ghost:hover{background:#f1ecdd}
+  #result{display:none}
+  #result.show{display:block}
+  #output{
+    min-height:340px;
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    font-size:.82rem;
+    line-height:1.5;
+    background:#0f1b2d;
+    color:#eef1f7;
+    border-color:#0f1b2d;
+  }
+  .status{color:var(--ok);font-weight:600;min-height:1.4em;margin-top:10px}
+  .warn{color:#a4391f;font-weight:600;margin-top:10px;min-height:1.4em}
+  .tools{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+  .note{
+    background:#fbf3dc;
+    border-left:4px solid var(--gold);
+    padding:12px 14px;
+    border-radius:8px;
+    font-size:.9rem;
+    margin-top:14px;
+  }
+  footer{text-align:center;color:var(--muted);font-size:.85rem;padding:0 16px 40px}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="eyebrow">AI Literacy Project</div>
+  <h1>Community of the Future<br>Brochure Prompt Builder</h1>
+  <p>Fill in your own community details, choose who lives there, and get a ready-to-paste prompt that turns your idea into a luxury real estate brochure.</p>
+</header>
+
+<main>
+
+  <div class="steps">
+    <div class="step"><b>1</b>Fill in your community details below.</div>
+    <div class="step"><b>2</b>Choose who lives in your community.</div>
+    <div class="step"><b>3</b>Press Build My Prompt and copy it.</div>
+    <div class="step"><b>4</b>Paste it into your AI tool, then check and improve the result yourself.</div>
+  </div>
+
+  <form id="builder" autocomplete="off">
+
+    <section class="card">
+      <h2>1. About You</h2>
+      <p class="sub">Your name goes on the back cover of the brochure.</p>
+      <div class="grid">
+        <label class="field">Your name
+          <input type="text" id="studentName" placeholder="Example: Layla Ahmed">
+        </label>
+        <label class="field">Your grade
+          <select id="grade">
+            <option value="">Choose</option>
+            <option>6</option><option>7</option><option>8</option><option>9</option>
+            <option>10</option><option>11</option><option>12</option>
+          </select>
+        </label>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>2. Your Community</h2>
+      <p class="sub">The more specific you are, the better your brochure will be.</p>
+      <div class="grid">
+        <label class="field">Community name <span style="color:#a4391f">*</span>
+          <input type="text" id="communityName" placeholder="Example: Aurora Bay">
+        </label>
+        <label class="field">Tagline idea
+          <span class="hint">Leave empty and the AI will write one.</span>
+          <input type="text" id="tagline" placeholder="Example: Where tomorrow feels like home">
+        </label>
+
+        <label class="field">Setting
+          <select id="setting">
+            <option value="">Choose a setting</option>
+            <option>Coastal and beachfront</option>
+            <option>Desert oasis</option>
+            <option>Mountain and valley</option>
+            <option>Forest and green belt</option>
+            <option>Floating on the ocean</option>
+            <option>Underground and climate controlled</option>
+            <option>Space station or orbit</option>
+            <option>Another planet</option>
+            <option>Arctic and snow</option>
+            <option>Island</option>
+          </select>
+        </label>
+        <label class="field">Where in the world (real or imaginary)
+          <input type="text" id="location" placeholder="Example: Off the coast of Dubai">
+        </label>
+
+        <label class="field">Year it is set in
+          <select id="year">
+            <option value="">Choose a year</option>
+            <option>2050</option><option>2075</option><option>2100</option>
+            <option>2150</option><option>2200</option><option>2300</option>
+          </select>
+        </label>
+        <label class="field">Number of residents
+          <select id="population">
+            <option value="">Choose a size</option>
+            <option>Under 500 (boutique village)</option>
+            <option>500 to 2,000</option>
+            <option>2,000 to 10,000</option>
+            <option>10,000 to 50,000</option>
+            <option>Over 50,000 (full city)</option>
+          </select>
+        </label>
+      </div>
+
+      <div style="margin-top:18px">
+        <label class="field">Main zones in your community
+          <span class="hint">Tick everything that appears in your design or LEGO build.</span>
+        </label>
+        <div class="checks" id="zones">
+          <label class="check"><input type="checkbox" value="Housing and residences"> Housing and residences</label>
+          <label class="check"><input type="checkbox" value="School and learning campus"> School and learning campus</label>
+          <label class="check"><input type="checkbox" value="Hospital and wellness centre"> Hospital and wellness centre</label>
+          <label class="check"><input type="checkbox" value="Parks and green spaces"> Parks and green spaces</label>
+          <label class="check"><input type="checkbox" value="Transport hub"> Transport hub</label>
+          <label class="check"><input type="checkbox" value="Market and food district"> Market and food district</label>
+          <label class="check"><input type="checkbox" value="Technology and innovation lab"> Technology and innovation lab</label>
+          <label class="check"><input type="checkbox" value="Sports and recreation"> Sports and recreation</label>
+          <label class="check"><input type="checkbox" value="Arts and culture centre"> Arts and culture centre</label>
+          <label class="check"><input type="checkbox" value="Clean energy plant"> Clean energy plant</label>
+          <label class="check"><input type="checkbox" value="Water and recycling system"> Water and recycling system</label>
+          <label class="check"><input type="checkbox" value="Vertical farms"> Vertical farms</label>
+        </div>
+      </div>
+
+      <div class="grid" style="margin-top:18px">
+        <label class="field full">Other zones or landmarks
+          <input type="text" id="otherZones" placeholder="Example: A glass observatory, a robot repair cafe">
+        </label>
+        <label class="field full">Technology and sustainability features
+          <span class="hint">Think about energy, water, food, transport, AI, robots, safety.</span>
+          <textarea id="tech" placeholder="Example: Solar roads, AI helper robots, driverless pods, rainwater recycling"></textarea>
+        </label>
+      </div>
+
+      <div class="grid three" style="margin-top:6px">
+        <label class="field">Special thing 1
+          <input type="text" id="special1" placeholder="Example: Floating gardens">
+        </label>
+        <label class="field">Special thing 2
+          <input type="text" id="special2" placeholder="Example: Free AI tutor for everyone">
+        </label>
+        <label class="field">Special thing 3
+          <input type="text" id="special3" placeholder="Example: Zero waste promise">
+        </label>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>3. Who Lives Here</h2>
+      <p class="sub">Choose every group your community is designed for. The brochure will explain how your design supports each one and how the groups benefit each other.</p>
+      <div class="checks" id="groups">
+        <label class="check"><input type="checkbox" value="Young children and families"> <span>Young children and families</span></label>
+        <label class="check"><input type="checkbox" value="Teenagers and students"> <span>Teenagers and students</span></label>
+        <label class="check"><input type="checkbox" value="Young professionals"> <span>Young professionals</span></label>
+        <label class="check"><input type="checkbox" value="Older adults and retirees"> <span>Older adults and retirees</span></label>
+        <label class="check"><input type="checkbox" value="Students of determination (SOD) and residents with physical or learning needs"> <span>Students of determination (SOD) and residents with physical or learning needs</span></label>
+        <label class="check"><input type="checkbox" value="Neurodivergent residents"> <span>Neurodivergent residents</span></label>
+        <label class="check"><input type="checkbox" value="Multilingual and international residents"> <span>Multilingual and international residents</span></label>
+      </div>
+      <div class="grid" style="margin-top:14px">
+        <label class="field full">Another group (optional)
+          <input type="text" id="otherGroup" placeholder="Example: Artists, scientists, pet owners">
+        </label>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>4. Look and Feel</h2>
+      <p class="sub">This is what gives the brochure its luxury feel.</p>
+      <div class="grid">
+        <label class="field">Style and mood
+          <select id="style">
+            <option value="">Let the AI decide</option>
+            <option>Modern Minimal</option>
+            <option>Green Oasis</option>
+            <option>Futuristic Glass and Gold</option>
+            <option>Desert Luxury</option>
+            <option>Ocean Resort</option>
+            <option>Art Deco Future</option>
+            <option>Nordic Calm</option>
+          </select>
+        </label>
+        <label class="field">Colour palette
+          <select id="colours">
+            <option value="">Let the AI decide</option>
+            <option>Deep navy and gold</option>
+            <option>Emerald green and cream</option>
+            <option>Black, white and rose gold</option>
+            <option>Sand, terracotta and bronze</option>
+            <option>Ocean blue and pearl white</option>
+            <option>Charcoal and copper</option>
+          </select>
+        </label>
+        <label class="field">Price level
+          <select id="price">
+            <option value="">Let the AI decide</option>
+            <option>Accessible and affordable</option>
+            <option>Premium</option>
+            <option>Luxury</option>
+            <option>Ultra luxury</option>
+          </select>
+        </label>
+        <label class="field">Number of zoom-in pages
+          <select id="zooms">
+            <option>3</option>
+            <option selected>4</option>
+            <option>5</option>
+            <option>6</option>
+          </select>
+        </label>
+        <label class="field full">What do you want the AI to build?
+          <select id="format">
+            <option value="html" selected>A printable web page brochure (HTML file)</option>
+            <option value="canva">Page by page text and image prompts so I can build it in Canva</option>
+          </select>
+        </label>
+      </div>
+    </section>
+
+    <div class="actions">
+      <button type="button" class="primary" id="buildBtn">Build My Prompt</button>
+      <button type="reset" class="ghost" id="resetBtn">Start Again</button>
+    </div>
+    <div class="warn" id="warn" role="alert"></div>
+  </form>
+
+  <section class="card" id="result" style="margin-top:24px">
+    <h2>Your Prompt</h2>
+    <p class="sub">Copy this whole prompt and paste it into your AI tool.</p>
+    <textarea id="output" readonly></textarea>
+    <div class="actions" style="margin-top:14px">
+      <button type="button" class="primary" id="copyBtn">Copy Prompt</button>
+      <button type="button" class="dark" id="downloadBtn">Download as Text File</button>
+    </div>
+    <div class="status" id="status" role="status"></div>
+
+    <div class="tools">
+      <a class="btn ghost" href="https://gemini.google.com/app" target="_blank" rel="noopener">Open Gemini</a>
+      <a class="btn ghost" href="https://claude.ai/new" target="_blank" rel="noopener">Open Claude</a>
+      <a class="btn ghost" href="https://chatgpt.com/" target="_blank" rel="noopener">Open ChatGPT</a>
+    </div>
+
+    <div class="note">
+      The AI may ask you a few questions first. Answer them honestly, because that is how your brochure becomes yours. When the brochure is ready, check every claim against your own design and fix anything the AI got wrong.
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  North American International School, AI Literacy. Use AI to scaffold your thinking, never to replace it.
+</footer>
+
+<script>
+(function(){
+  var $ = function(id){ return document.getElementById(id); };
+
+  function val(id, fallback){
+    var el = $(id);
+    var v = el ? el.value.trim() : "";
+    return v || fallback;
+  }
+
+  function checked(containerId){
+    var boxes = document.querySelectorAll("#" + containerId + " input[type=checkbox]:checked");
+    var out = [];
+    for (var i = 0; i < boxes.length; i++){ out.push(boxes[i].value); }
+    return out;
+  }
+
+  function letterList(items){
+    var letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    var lines = [];
+    for (var i = 0; i < items.length; i++){
+      lines.push(letters.charAt(i) + ". " + items[i]);
+    }
+    return lines.join("\n");
+  }
+
+  function buildPrompt(){
+    var name = val("communityName", "");
+    var student = val("studentName", "the student designer");
+    var grade = val("grade", "");
+    var setting = val("setting", "you decide");
+    var location = val("location", "you decide");
+    var year = val("year", "you decide");
+    var pop = val("population", "you decide");
+    var tagline = val("tagline", "you decide (write 3 options and use the best one)");
+    var tech = val("tech", "you decide, based on my zones and setting");
+    var style = val("style", "you decide");
+    var colours = val("colours", "you decide");
+    var price = val("price", "you decide");
+    var zooms = val("zooms", "4");
+    var format = val("format", "html");
+
+    var zones = checked("zones");
+    var otherZones = val("otherZones", "");
+    if (otherZones){ zones.push(otherZones); }
+    var zoneText = zones.length ? zones.join(", ") : "you decide, based on my setting";
+
+    var groups = checked("groups");
+    var otherGroup = val("otherGroup", "");
+    if (otherGroup){ groups.push(otherGroup); }
+    var groupText = groups.length ? letterList(groups) : "A. Mixed community for all ages and abilities";
+
+    var specials = [];
+    for (var s = 1; s <= 3; s++){
+      var sv = val("special" + s, "");
+      if (sv){ specials.push(sv); }
+    }
+    var specialText = specials.length ? specials.join("; ") : "you decide (suggest 3 and label them as suggested)";
+
+    var credit = "Designed by " + student + (grade ? ", Grade " + grade : "");
+
+    var p = [];
+    p.push("You are a luxury real estate marketing designer and copywriter. Create a premium brochure that sells my community of the future to the wider public. Before you write anything, read all my details below. If something important is missing, ask me up to 5 short questions first, then build the brochure.");
+    p.push("");
+    p.push("PART 1: MY COMMUNITY DETAILS");
+    p.push("");
+    p.push("1. Community name: " + (name || "you decide (suggest 3 names and use the best one)"));
+    p.push("2. Tagline: " + tagline);
+    p.push("3. Setting: " + setting);
+    p.push("4. Location: " + location);
+    p.push("5. Year it is set in: " + year);
+    p.push("6. Number of residents: " + pop);
+    p.push("7. Main zones and landmarks: " + zoneText);
+    p.push("8. Technology and sustainability features: " + tech);
+    p.push("9. Three things that make my community special: " + specialText);
+    p.push("10. Style and mood: " + style);
+    p.push("11. Colour palette: " + colours);
+    p.push("12. Price level: " + price + " (create 3 home packages with names, features, and prices)");
+    p.push("");
+    p.push("PART 2: WHO LIVES IN MY COMMUNITY");
+    p.push("");
+    p.push("My community is designed for these groups:");
+    p.push(groupText);
+    p.push("");
+    p.push("PART 3: WHAT THE BROCHURE MUST CONTAIN");
+    p.push("");
+    p.push("Create these pages in this order:");
+    p.push("");
+    p.push("1. Cover page with the community name, tagline, and a large image space for my main LEGO or design photo.");
+    p.push("2. Welcome letter from the developer, written in an elegant, confident voice.");
+    p.push("3. Master plan page with a simple labelled map. Use numbered labels and a key. Mark every zone and landmark.");
+    p.push("4. Zoom-in pages (" + zooms + " pages). Each one shows a close-up of one feature, with circle callouts, labelled lines, and short captions explaining what it does and why residents love it.");
+    p.push("5. Who Lives Here page. For EVERY group I listed in Part 2, write one paragraph explaining how the community is designed for them (specific features, not vague claims). Then write one paragraph on the benefits of different ages and abilities living side by side: how older adults, younger people, and students of determination all gain from the community. Language must be respectful and positive, and must never treat any group as a problem to solve.");
+    p.push("6. A Day in the Life page following two or three different residents from morning to night.");
+    p.push("7. Amenities and Technology page with a clean comparison table.");
+    p.push("8. Sustainability and Future Planning page.");
+    p.push("9. Homes and Packages page with names, features, and prices.");
+    p.push("10. Resident voices page with 3 imaginary quotes, clearly labelled as fictional.");
+    p.push("11. Back cover with imaginary contact details, a call to action, and this credit: \"" + credit + "\".");
+    p.push("");
+    p.push("PART 4: " + (format === "canva" ? "OUTPUT FORMAT" : "DESIGN RULES"));
+    p.push("");
+    if (format === "canva"){
+      p.push("I will build this brochure in Canva. For each page, give me:");
+      p.push("1. Page title and layout idea (where the image, headline, body text, and labels go).");
+      p.push("2. Headline and final body copy, ready to paste.");
+      p.push("3. Captions and label text for any zoom-in circles or callouts.");
+      p.push("4. An image prompt for an AI image generator, or a clear note such as \"Insert photo: [what it should show]\" where I should use my own LEGO photos.");
+      p.push("Also give me a luxury design kit: a colour palette with hex codes, a font pairing available in Canva (elegant serif headings and clean sans serif body), and 5 layout tips for a premium feel such as white space, thin gold lines, and a consistent grid.");
+    } else {
+      p.push("Luxury feel: generous white space, elegant serif headings with a clean sans serif body, a restrained colour palette (2 main colours plus 1 accent), thin metallic lines, large image areas, and a consistent grid. Build it as ONE self-contained HTML file with CSS, laid out as A4 landscape pages that print cleanly to PDF. Use SVG for the map, labels, and zoom-in circles. Where I need to add my own photos, insert clearly marked image placeholders with the caption \"Insert photo: [what it should show]\".");
+    }
+    p.push("");
+    p.push("PART 5: QUALITY RULES");
+    p.push("");
+    p.push("1. Use persuasive marketing language, but every claim must match the details I gave you. Do not invent features I did not mention without labelling them \"suggested\".");
+    p.push("2. Use specific nouns and numbers where possible.");
+    p.push("3. Do not copy real brand names, real developers, or real people.");
+    p.push("4. Keep captions under 25 words.");
+    p.push("5. At the end, list 3 things I should check or improve myself, because I am the designer and this is my work.");
+    p.push("");
+    p.push("Now ask your questions if needed, otherwise build the brochure.");
+
+    return p.join("\n");
+  }
+
+  var output = $("output");
+  var result = $("result");
+  var warn = $("warn");
+  var status = $("status");
+
+  $("buildBtn").addEventListener("click", function(){
+    status.textContent = "";
+    if (!val("communityName", "")){
+      warn.textContent = "Please type your community name first. It is the only required box.";
+      $("communityName").focus();
+      return;
+    }
+    warn.textContent = "";
+    output.value = buildPrompt();
+    result.classList.add("show");
+    result.scrollIntoView({behavior:"smooth", block:"start"});
+  });
+
+  $("resetBtn").addEventListener("click", function(){
+    result.classList.remove("show");
+    output.value = "";
+    warn.textContent = "";
+    status.textContent = "";
+  });
+
+  function copyText(text){
+    if (navigator.clipboard && window.isSecureContext){
+      return navigator.clipboard.writeText(text);
+    }
+    return new Promise(function(resolve, reject){
+      try {
+        output.removeAttribute("readonly");
+        output.select();
+        var ok = document.execCommand("copy");
+        output.setAttribute("readonly", "readonly");
+        window.getSelection().removeAllRanges();
+        ok ? resolve() : reject();
+      } catch (e){ reject(e); }
+    });
+  }
+
+  $("copyBtn").addEventListener("click", function(){
+    copyText(output.value).then(function(){
+      status.textContent = "Copied. Now paste it into your AI tool.";
+    }).catch(function(){
+      status.textContent = "";
+      warn.textContent = "Copy did not work. Click inside the box, press Ctrl+A then Ctrl+C (or Cmd+A then Cmd+C on Mac).";
+    });
+  });
+
+  $("downloadBtn").addEventListener("click", function(){
+    var blob = new Blob([output.value], {type:"text/plain"});
+    var a = document.createElement("a");
+    var safe = (val("communityName", "community") + "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+    a.href = URL.createObjectURL(blob);
+    a.download = (safe || "community") + "-brochure-prompt.txt";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(function(){ URL.revokeObjectURL(a.href); }, 1000);
+    status.textContent = "Downloaded.";
+  });
+})();
+</script>
+</body>
+</html>
